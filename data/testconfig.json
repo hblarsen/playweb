@@ -1,0 +1,85 @@
+{
+	"parameters": [
+	{
+		"pid": "1",
+		"name": "OS",
+		"type": "enum",
+		"values": [
+			"Windows",
+			"OSX",
+			"Ubuntu"
+		]
+	},
+	{
+		"pid": "2",
+		"name": "HD",
+		"type": "enum",
+		"values": [
+			"HDD",
+			"SSD"
+		]
+	},
+	{
+		"pid": "3",
+		"name": "CPU",
+		"type": "enum",
+		"values": [
+			"AMD",
+			"Intel"
+		]
+	},
+	{
+		"pid": "4",
+		"name": "Storage Size",
+		"type": "enum",
+		"values": [
+			"120",
+			"240",
+			"500",
+			"1000"
+		]
+	}
+	],
+	
+	"rules": [
+	{
+		"rid": "1",
+		"if": [ 
+			{
+				"pid": "1",
+				"operator": "==",
+				"value": "OSX"
+			} 
+		],
+		"then": [ 
+			{
+				"pid": "3",
+				"operator": "==",
+				"value": "Intel"
+			}
+		]
+	},
+	{
+		"rid": "2",
+		"if": [ 
+			{
+				"pid": "2",
+				"operator": "==",
+				"value": "SSD"
+			} 
+		],
+		"then": [ 
+			{
+				"pid": "4",
+				"operator": "==",
+				"value": "120"
+			},
+			{
+				"pid": "4",
+				"operator": "==",
+				"value": "240"
+			}
+		]
+	}
+	]
+}

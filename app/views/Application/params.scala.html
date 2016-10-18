@@ -1,0 +1,9 @@
+@(params: List[Param])
+
+<h1>Parameters</h1>
+
+<ul>
+    @for(param <- params) {
+    <li>@param.name</li>
+    }
+</ul>
