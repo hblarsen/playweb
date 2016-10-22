@@ -1,85 +1,23 @@
 {
+    "cname" : "testconfig",
 	"parameters": [
-	{
-		"pid": "1",
-		"name": "OS",
-		"type": "enum",
-		"values": [
-			"Windows",
-			"OSX",
-			"Ubuntu"
-		]
-	},
-	{
-		"pid": "2",
-		"name": "HD",
-		"type": "enum",
-		"values": [
-			"HDD",
-			"SSD"
-		]
-	},
-	{
-		"pid": "3",
-		"name": "CPU",
-		"type": "enum",
-		"values": [
-			"AMD",
-			"Intel"
-		]
-	},
-	{
-		"pid": "4",
-		"name": "Storage Size",
-		"type": "enum",
-		"values": [
-			"120",
-			"240",
-			"500",
-			"1000"
-		]
-	}
+      { "pname": "OS", "ptype": "enum", "pvalues": [ "Windows","OSX","Ubuntu"] },
+	  {	"pname": "HD", "ptype": "range", "pvalues": [ "500", "2000" ] },
+      { "pname": "HDMI", "ptype": "bool", "pvalues": [ "false", "true"] }
 	],
-	
+
 	"rules": [
-	{
-		"rid": "1",
-		"if": [ 
-			{
-				"pid": "1",
-				"operator": "==",
-				"value": "OSX"
-			} 
-		],
-		"then": [ 
-			{
-				"pid": "3",
-				"operator": "==",
-				"value": "Intel"
-			}
-		]
-	},
-	{
-		"rid": "2",
-		"if": [ 
-			{
-				"pid": "2",
-				"operator": "==",
-				"value": "SSD"
-			} 
-		],
-		"then": [ 
-			{
-				"pid": "4",
-				"operator": "==",
-				"value": "120"
-			},
-			{
-				"pid": "4",
-				"operator": "==",
-				"value": "240"
-			}
-		]
-	}
-	]
+	  { "rname": "Storage",
+        "rif": [ "AND", { "HD": "SSD" }, { "CPU": "AMD" }],
+        "rthen": ["OR", { "HDSize": "120" }, {"HDSize": "240" }]
+      },
+      { "rname": "Ports",
+        "rif": { "HDMI": "true" },
+        "rthen": [ "AND", { "CPU": "AMD" }, [ "OR", { "OS": "OSX" }, { "OS": "Ubuntu"}] ]
+      },
+      { "rname": "OSX",
+        "rif": { "OS": "OSX"},
+        "rthen": [ "NOT", { "CPU": "AMD" }, {"NULL": "true" }]
+      }
+    ]
 }

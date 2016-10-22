@@ -11,7 +11,7 @@ object ProductConfigurator extends Controller{
   val configurator = Configurator
 
   val list = Action {
-    Ok(views.html.Application.params(configurator.getParams().toList))
+    Ok(views.html.Application.parameters(configurator.getParams.toList))
   }
 
   def init() = Action{

@@ -7,33 +7,47 @@ import scala.collection.concurrent.TrieMap
 /**
   * Created by HEBL on 17-10-2016.
   */
-  case class Param (id: Long, name: String)
+  //case class Param (id: Long, name: String)
 
   trait Configurator {
-    def getParams(): Seq[Param]
-    def addParam(name: String): Option[Param]
 
-    //def get(id: Long): Option[Params]
-    //def update(id: Long, name: String): Option[Params]
-    //def delete(id: Long): Boolean
+    var rules = Map.empty[String, Rule]
+    var parameters = Map.empty[String, Parameter]
+
+    def addParam(name: String): Option[Parameter]
+    def getParams: Seq[Parameter]
+    def addRule(name: String): Option[Rule]
+    def getRules: Seq[Rule]
   }
 
   object Configurator extends Configurator{
 
-    private val params = TrieMap.empty[Long, Param]
-    private val seq = new AtomicLong
+    //private val pseq = new AtomicLong
+    //private val rseq = new AtomicLong
 
-    def getParams(): Seq[Param] = params.values.to[Seq]
+    def addParam(name: String): Option[Parameter] = {
+      //val id = pseq.incrementAndGet()
 
-    def addParam(name: String): Option[Param] = {
-      val id = seq.incrementAndGet()
-      val param = Param(id, name)
-      params.put(id, param)
+      val param = Parameter("HD","enum", List("SSD","HDD"))
+
+      parameters += param.pname -> param
+
       Some(param)
     }
 
-    def initParams(): Option[Param] = {
+    def getParams: Seq[Parameter] = parameters.values.to[Seq]
+
+    def initParams(): Option[Parameter] = {
       addParam("One")
       addParam("Two")
     }
+
+    def addRule(name: String): Option[Rule] = {
+      //val id = rseq.incrementAndGet()
+      val rule = Rule(name)
+      rules += rule.rname -> rule
+      Some(rule)
+    }
+
+    def getRules: Seq[Rule] = rules.values.to[Seq]
   }
