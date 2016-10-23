@@ -4,17 +4,34 @@ import play.api.libs.functional.syntax._ // Combinator syntax
 
 package models {
 
-  /**
-    * Created by HEBL on 20-10-2016.
-    */
-  /*
+  class JConfigurationFactory() extends Exception{
 
-case class JRules(rules: Seq[JRule])
+    def createConfig: JConfiguration = {
 
-case class JRule(rname: String,
-                 rif: Option[Seq[Any]],
-                 rthen: Option[Seq[Any]])
-*/
+      val f: String = "./data/testconfig.json"
+
+      val rulesFile = scala.io.Source.fromFile(f).mkString
+
+      implicit val parameterBuilder = (
+        (JsPath \ "pname").read[String] and
+          (JsPath \ "ptype").read[String] and
+          (JsPath \ "pvalues").read[Seq[String]]
+        ) (JParameter.apply _)
+
+      implicit val configBuilder = (
+        (JsPath \ "cname").read[String] and
+          (JsPath \ "parameters").read[Seq[JParameter]]) (JConfiguration.apply _)
+
+      val inputJson: JsValue = Json.parse(rulesFile)
+
+      inputJson.validate[JConfiguration] match {
+        case s: JsSuccess[JConfiguration] =>
+          s.get
+        case e: JsError =>
+          throw new Exception("Error")
+      }
+    }
+  }
 
   case class JConfiguration(cname: String, parameters: Seq[JParameter])
 
@@ -22,5 +39,8 @@ case class JRule(rname: String,
                         ptype: String,
                         pvalues: Seq[String])
 
+  case class JRule(rname: String,
+                   rif: Option[Seq[Any]],
+                   rthen: Option[Seq[Any]])
 
 }

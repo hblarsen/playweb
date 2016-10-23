@@ -4,11 +4,6 @@ import java.util.concurrent.atomic.AtomicLong
 
 import scala.collection.concurrent.TrieMap
 
-/**
-  * Created by HEBL on 17-10-2016.
-  */
-  //case class Param (id: Long, name: String)
-
   trait Configurator {
 
     var rules = Map.empty[String, Rule]

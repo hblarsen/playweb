@@ -1,7 +1,7 @@
 package controllers
 
-import play.api.mvc.{Controller, Action}
-import models.Configurator
+import play.api.mvc.{Action, Controller}
+import models.{Configurator, JConfiguration, JConfigurationFactory}
 
 /**
   * Created by HEBL on 17-10-2016.
@@ -11,17 +11,11 @@ object ProductConfigurator extends Controller{
   val configurator = Configurator
 
   val list = Action {
-    Ok(views.html.Application.parameters(configurator.getParams.toList))
+    Ok(views.html.Application.parameters((new JConfigurationFactory).createConfig.parameters))
   }
 
   def init() = Action{
-    configurator.initParams()
+    //configurator.initParams()
     Ok("Hello Init")
   }
-
-  //def show(id: Long) = Action {
-    //configurator.findById(id).map { client =>
-      //Ok(views.html.Application.params(configurator.list().toList))
-    //}.getOrElse(NotFound)
-  //}
 }

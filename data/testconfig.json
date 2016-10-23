@@ -2,10 +2,10 @@
     "cname" : "testconfig",
 	"parameters": [
       { "pname": "OS", "ptype": "enum", "pvalues": [ "Windows","OSX","Ubuntu"] },
+      {	"pname": "CPU", "ptype": "enum", "pvalues": [ "Intel", "AMD" ] },
 	  {	"pname": "HD", "ptype": "range", "pvalues": [ "500", "2000" ] },
       { "pname": "HDMI", "ptype": "bool", "pvalues": [ "false", "true"] }
 	],
-
 	"rules": [
 	  { "rname": "Storage",
         "rif": [ "AND", { "HD": "SSD" }, { "CPU": "AMD" }],

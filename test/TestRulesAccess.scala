@@ -27,18 +27,18 @@ class TestRulesAccess extends Specification{
 
       implicit val parameterBuilder = (
         (JsPath \ "pname").read[String] and
-        (JsPath \ "ptype").read[String] and
-        (JsPath \ "pvalues").read[Seq[String]]
-        )(JParameter.apply _)
+          (JsPath \ "ptype").read[String] and
+          (JsPath \ "pvalues").read[Seq[String]]
+        ) (JParameter.apply _)
       //implicit val parameterReads = parameterBuilder.apply(JParameter.apply _)
 
       implicit val configBuilder = (
         (JsPath \ "cname").read[String] and
-        (JsPath \ "parameters").read[Seq[JParameter]])(JConfiguration.apply _)
+          (JsPath \ "parameters").read[Seq[JParameter]]) (JConfiguration.apply _)
 
       val inputJson: JsValue = Json.parse(rulesFile)
 
-      inputJson.validate[JConfiguration] match{
+      inputJson.validate[JConfiguration] match {
         case s: JsSuccess[JConfiguration] => {
           val c: JConfiguration = s.get
           println(c.cname)
@@ -49,8 +49,9 @@ class TestRulesAccess extends Specification{
       }
 
       inputJson.toString().length > 0 must beTrue
-
     }
-
+    //"factory instance" in {
+    //  JConfigurationFactory.create().
+    //}
   }
 }

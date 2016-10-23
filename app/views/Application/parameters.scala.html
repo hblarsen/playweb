@@ -1,9 +1,19 @@
-@(params: List[Parameter])
+@(params: Seq[JParameter])
 
 <h1>Parameters</h1>
 
 <ul>
     @for(param <- params) {
     <li>@param.pname</li>
+
+    <ul>
+        @for(pvalue <- param.pvalues) {
+        <li>
+            <a href="http://www.google.com">
+                @pvalue
+            </a>
+        </li>
+        }
+    </ul>
     }
 </ul>
