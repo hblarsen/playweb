@@ -1,0 +1,18 @@
+{
+  "product" : "computer",
+  "model" : "xyz",
+  "parameters" :
+  [ {
+    "pname": "OS",
+    "pvalue": "OSX"
+  },
+    {
+      "pname": "CPU",
+      "pvalue": "AMD"
+    },
+    {
+      "pname": "OS",
+      "pvalue": "OSX"
+    }
+  ]
+}

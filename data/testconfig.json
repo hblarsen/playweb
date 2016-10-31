@@ -1,5 +1,5 @@
 {
-    "cname" : "testconfig",
+    "cname": "testconfig",
 	"parameters": [
       { "pname": "OS", "ptype": "enum", "pvalues": [ "Windows","OSX","Ubuntu"] },
       {	"pname": "CPU", "ptype": "enum", "pvalues": [ "Intel", "AMD" ] },
@@ -8,15 +8,15 @@
 	],
 	"rules": [
 	  { "rname": "Storage",
-        "rif": [ "AND", { "HD": "SSD" }, { "CPU": "AMD" }],
-        "rthen": ["OR", { "HDSize": "120" }, {"HDSize": "240" }]
+        "rif": [ "AND", { "HD": "SSD" }, { "CPU": "AMD" } ] ,
+        "rthen": [ "OR", { "HDSize": "120" }, {"HDSize": "240" } ]
       },
       { "rname": "Ports",
-        "rif": { "HDMI": "true" },
-        "rthen": [ "AND", { "CPU": "AMD" }, [ "OR", { "OS": "OSX" }, { "OS": "Ubuntu"}] ]
+        "rif": [ "", { "HDMI": "true" }],
+        "rthen": [ "AND", { "CPU": "AMD" }, [ "OR", { "OS": "OSX" }, { "OS": "Ubuntu"} ] ]
       },
       { "rname": "OSX",
-        "rif": { "OS": "OSX"},
+        "rif": [ "", { "OS": "OSX"}],
         "rthen": [ "NOT", { "CPU": "AMD" }, {"NULL": "true" }]
       }
     ]
