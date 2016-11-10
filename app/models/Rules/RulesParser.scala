@@ -1,40 +1,78 @@
 package models.Rules
 
+import models.Rules
+
 import scala.language.higherKinds
 import scala.language.implicitConversions
-
 import scala.language.postfixOps
 import scala.util.parsing.combinator.syntactical.StandardTokenParsers
+import scala.util.parsing.combinator.RegexParsers
+import scala.util.parsing.json
 
-
-/**
-  * Created by HEBL on 22-10-2016.
-  */
+// First attempt at Parser Combinators
+// This class is not used anymore - just kept here for reference
 class RulesParser extends StandardTokenParsers {
 
-    //Json Syntax
-    lexical.delimiters += ("{", "}", "[", "]", ":", ",")
-    lexical.reserved += ("null", "true", "false")
+  //Json Syntax
+  def QUOTE = "\""
 
-    def value : Parser[Any] = obj | arr | stringLit | numericLit | "null" | "true" | "false"
-    def obj : Parser[Any] = "{" ~ repsep(member, ",") ~ "}"
-    def arr : Parser[Any] = "[" ~ repsep(value, ",") ~ "]"
-    def member: Parser[Any] = stringLit ~ ":" ~ value
+  lexical.delimiters += ("{", "}", "[", "]", ":", ",")
+  lexical.reserved += ("cname", "parameters", "rules")
 
-    //Configuration Syntax
-    def configrules : Parser[Any] = "{" ~ keyword("cname") ~ ":" ~ stringLit ~ "," ~ keyword("parameters") ~ ":" ~ parameters ~ "," ~ "rules" ~ ":" ~ rules ~ "}"
-    def parameters: Parser[Any] = stringLit ~ ":" ~ "[" ~ repsep(parameter, ",") ~ "]"
-    def parameter: Parser[Any] = "{" ~ stringLit ~ ":" ~ stringLit ~ "," ~ stringLit ~ ":" ~ stringLit ~ "," ~ stringLit ~ ":" ~ vrange ~ "}"
-    def vrange: Parser[Any] = "[" ~ repsep(stringLit, ",") ~ "]"
-    def rules : Parser[Any] = "[" ~ repsep(rule, ",") ~ "]"
-    def rule: Parser[Any] = "{" ~ "rname" ~ ":" ~ stringLit ~ "," ~ "rif" ~ ":" ~ rif ~ "," ~ "rthen" ~ ":" ~ rthen ~ "}"
-    def rexpr : Parser[Any] = "[" ~ rops ~ "," ~ rif ~ "," ~ rthen ~ "]"
-    def rif: Parser[Any] = obj | rexpr
-    def rthen: Parser[Any] = rif
-    def rops : Parser[Any] = "AND" | "OR" | "NOT"
+  //def value : Parser[Any] = obj | arr | stringLit | numericLit | "null" | "true" | "false"
+  def value : Parser[Any] = obj | arr | stringLit | numericLit
+  def obj : Parser[Any] = "{" ~ repsep(member, ",") ~ "}"
+  def arr : Parser[Any] = "[" ~ repsep(value, ",") ~ "]"
+  def member: Parser[Any] = stringLit ~ ":" ~ value
 
-    //val QUOTED: Parser[String] = "([^"]*)"""".r.map { _ dropRight 1 substring 1}
-    //val x: Parser[String] = """\d+""".r.map { _ dropRight 1 substring 1}
+  //Configuration Syntax
+  def configrules : Parser[Any] = "{" ~ member ~ "," ~ member ~ "," ~ member ~ "}"
 
-    //val identifier: Parser[String] = """\^?[a-zA-Z]+""".r ^^ { s => if (s startsWith "^") s substring 1 else s }
+}
+
+// Latest version of a parser for the .txt version of rules file
+class RuleTextParser extends StandardTokenParsers {
+
+  lexical.delimiters += ("{", "}", "[", "]", ":", ",")
+  lexical.reserved += ("cname", "parameters", "rules", "pname", "pvalues", "rname", "rif", "rthen", "AND", "OR", "NOT")
+
+  def value : Parser[Any] = obj | arr | stringLit | numericLit
+  def obj : Parser[Any] = "{" ~ repsep(member, ",") ~ "}"
+  def arr : Parser[Any] = "[" ~ repsep(value, ",") ~ "]"
+  def member: Parser[Any] = stringLit ~ ":" ~ value
+
+  def rulesfile : Parser[Any] = "{" ~ "cname" ~ ":" ~ stringLit ~ "," ~ parameters ~ "," ~ rules ~ "}" ^^ {
+    case _ ~ _ ~ _ ~ cn ~ _ ~ _ ~ _ ~ _ ~ _  => ruleModel(cn)
+  }
+
+  def parameters: Parser[Any] = "parameters" ~ ":" ~ "[" ~ repsep(parameter, ",") ~ "]"
+
+  def rules : Parser[Any] = "rules" ~ ":" ~ "[" ~ repsep(rule, ",") ~ "]"
+
+  def parameter: Parser[Any] = "{" ~ "pname" ~ ":" ~ stringLit ~ "," ~ "pvalues" ~ ":" ~ vrange ~ "}" ^^ {
+    case _ ~ _ ~ _ ~ pn ~ _ ~ _ ~ _ ~ _ ~ _ => ruleModel(pn)
+  }
+
+  def vrange: Parser[Any] = "[" ~ repsep(stringLit, ",") ~ "]"
+
+  def rule: Parser[Any] = "{" ~ "rname" ~ ":" ~ stringLit ~ "," ~ rif ~ "," ~ rthen ~ "}" ^^ {
+    p1 => ruleModel("rule")
+  }
+
+  def rif: Parser[JLeafs] = "rif" ~ ":" ~ (rexpr | obj) ^^ {
+    case x ~ obj => JAtom("a","b")
+    case x ~ rexpr => JExpr("test", JAtom("a","b"), JAtom("a","b"))
+  }
+
+  def rthen: Parser[JLeafs] = "rthen" ~ ":" ~ (rexpr | obj) ^^ { case x ~ obj => JAtom("a","b") }
+
+  def rexpr : Parser[Any] = "[" ~ rops ~ "," ~ obj ~ "," ~ (rexpr | obj) ~ "]"
+  def rops : Parser[String] = "AND" | "OR" | "NOT"
+
+}
+
+// This class is used as entry point for building an AST
+//
+case class ruleModel(t: String){
+      println(t)
 }

@@ -1,5 +1,7 @@
 package models.Rules {
 
+  // A temporary solution used for frontend development
+
   trait Configurator {
 
     var rules = Map.empty[String, JRule]
@@ -37,8 +39,12 @@ package models.Rules {
     }
 
     def addRule(rname: String, rif: Seq[String], rthen: Seq[String] ): Option[JRule] = {
+
       //val id = rseq.incrementAndGet()
-      val rule = JRule(rname, rif, rthen)
+      val l = JExpr("", JAtom("one", "two"), JAtom("",""))
+      val r = JExpr("", JAtom("one", "two"), JAtom("",""))
+
+      val rule = JRule(rname, l, r)
       rules += rule.rname -> rule
       Some(rule)
     }

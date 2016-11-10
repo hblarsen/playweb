@@ -3,9 +3,8 @@ package controllers
 import models.Rules.{Configurator, JConfigurationFactory}
 import play.api.mvc.{Action, Controller}
 
-/**
-  * Created by HEBL on 17-10-2016.
-  */
+// Controller for building the data structures used for displayin the parameters
+
 object ProductConfigurator extends Controller{
 
   val configurator = Configurator

@@ -8,16 +8,16 @@
 	],
 	"rules": [
 	  { "rname": "Storage",
-        "rif": [ "AND", { "HD": "SSD" }, { "CPU": "AMD" } ] ,
-        "rthen": [ "OR", { "HDSize": "120" }, {"HDSize": "240" } ]
+        "rif":   { "o": "AND", "l": { "n":"HD","v":"SSD" }, "r": { "n":"CPU", "v":"AMD" } } ,
+        "rthen": { "o": "OR", "l": { "n":"HDSize","v":"120" }, "r": { "n":"HDSize","v":"240" } }
       },
       { "rname": "Ports",
-        "rif": [ "", { "HDMI": "true" }],
-        "rthen": [ "AND", { "CPU": "AMD" }, [ "OR", { "OS": "OSX" }, { "OS": "Ubuntu"} ] ]
+        "rif":   { "o": "", "l": { "n":"HDMI","v":"true" } },
+        "rthen": { "o": "AND", "l": { "n":"CPU","v":"AMD" }, "r": { "o": "OR", "l": { "n":"OS","v":"OSX" }, "r": { "n":"OS","v":"Ubuntu" } } }
       },
       { "rname": "OSX",
-        "rif": [ "", { "OS": "OSX"}],
-        "rthen": [ "NOT", { "CPU": "AMD" }, {"NULL": "true" }]
+        "rif":   { "o": "", "l": { "n":"OS","v":"OSX" } },
+        "rthen": { "o": "NOT", "l": { "n":"CPU","v":"AMD" } }
       }
     ]
 }

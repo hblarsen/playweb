@@ -1,0 +1,29 @@
+README File
+Updated: 10.11.2016
+This file contains basic project information
+
+Project name: Configurator
+Project type: Play-Scala web application (MVC)
+Test API: Specs2 (Build-in)
+
+Initialization of play application requires Activator:
+Activator installation: https://www.lightbend.com/activator/download
+Activator template: just-play-scala
+
+Running the unit test
+Activator test
+
+Run
+Activator
+
+Project Structure:
+/app/models/Products
+/app/models/Rules
+/app/views
+/app/controllers
+/test
+
+Special files:
+/data/testfile.txt
+/build.sbt
+/conf/routes

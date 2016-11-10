@@ -1,6 +1,6 @@
 import java.io.StringReader
 
-import models.Rules.{DummyParsers, RulesParser}
+import models.Rules.{DummyParsers, RulesParser, RuleTextParser}
 import org.specs2.mutable.Specification
 
 import scala.util.parsing.input.StreamReader
@@ -9,7 +9,8 @@ import scala.util.parsing.input.StreamReader
   */
 class TestRulesParser extends Specification {
 
-  val f: String = "./data/testconfig.json"
+  val f: String = "./data/ruleconfig.json"
+  val tf: String = "./data/testfile.txt"
 
   "Regexp" should {
 
@@ -42,7 +43,7 @@ class TestRulesParser extends Specification {
     }
   }
 
-  "Rules" should {
+  "Configuration Rules" should {
 
     "parse" in {
       val rulesFile = scala.io.Source.fromFile(f).mkString
@@ -53,6 +54,28 @@ class TestRulesParser extends Specification {
           //val reader = StreamReader(new java.io.FileReader(f))
           val tokens = new lexical.Scanner(rulesFile)
           println(phrase(configrules)(tokens))
+        }
+      }
+
+      JSONTest.p
+
+      rulesFile.length > 0 must beTrue
+    }
+  }
+
+  "Testfile" should {
+
+    "parse" in {
+      val rulesFile = scala.io.Source.fromFile(tf).mkString
+
+      object JSONTest extends RuleTextParser {
+
+        def p = {
+          //val reader = StreamReader(new java.io.FileReader(f))
+          val tokens = new lexical.Scanner(rulesFile)
+
+          val out = phrase(rulesfile)(tokens)
+          println(out)
         }
       }
 

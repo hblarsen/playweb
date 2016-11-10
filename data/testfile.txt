@@ -1,0 +1,26 @@
+{
+    cname:  "ruleconfig",
+
+	parameters: [
+      { pname: "OS",  pvalues: [ "Windows","OSX","Ubuntu"] },
+      {	pname: "CPU", pvalues: [ "Intel", "AMD" ] },
+      {	pname: "HD", pvalues: [ "SSD", "HDD" ] },
+	  {	pname: "HDSize", pvalues: ["120", "240", "500", "2000" ] },
+      { pname: "HDMI", pvalues: [ "false", "true"] }
+    ],
+
+	rules: [
+	  { rname: "Storage",
+        rif:   [AND, {"HD":"SSD"}, {"CPU":"AMD"}] ,
+        rthen: [OR, {"HDSize":"120" },{"HDSize":"240" }]
+      },
+      { rname: "Ports",
+        rif:   {"HDMI":"True"},
+        rthen: [AND, {"CPU":"AMD"},[OR,{"OS":"OSX"},{"OS":"Ubuntu"}]]
+      },
+      { rname: "OSX",
+        rif:   {"OS":"OSX"},
+        rthen: [NOT,{"CPU":"AMD"},{"":""}]
+      }
+    ]
+}

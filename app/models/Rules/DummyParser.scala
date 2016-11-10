@@ -34,3 +34,8 @@ case class DummyParsers(name: String) extends RegexParsers {
 
     def ALT: Parser[String] = { "bla".r.map { _.concat("zzz") } }
 }
+
+//val QUOTED: Parser[String] = "([^"]*)".r.map { _ dropRight 1 substring 1}
+//val x: Parser[String] = """\d+""".r.map { _ dropRight 1 substring 1}
+
+//val identifier: Parser[String] = """\^?[a-zA-Z]+""".r ^^ { s => if (s startsWith "^") s substring 1 else s }
